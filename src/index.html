@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main App</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Custom Title Bar -->
+    <div class="title-bar">
+        <div class="title-bar-text">
+            <div class="title-bar-brand">
+                <div class="brand-dot"></div>
+                <div class="brand-text">
+                    <span class="brand-main">MTechWare's Hub</span>
+                    <span class="brand-subtitle">Stay up-to-date with my latest tools.</span>
+                </div>
+            </div>
+        </div>
+        <div class="title-bar-controls">
+            <button id="minimize-btn" class="title-bar-btn" title="Minimize">
+                <i class="fas fa-window-minimize"></i>
+            </button>
+            <button id="maximize-btn" class="title-bar-btn" title="Maximize">
+                <i class="fas fa-window-maximize"></i>
+            </button>
+            <button id="close-btn" class="title-bar-btn close-btn" title="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <!-- Tab Search -->
+                <div class="tab-search-container">
+                    <input type="text" id="tab-search" placeholder="Search tabs..." class="tab-search-input">
+                    <i class="fas fa-search tab-search-icon"></i>
+                </div>
+            </div>
+
+            <!-- Navigation Header -->
+            <div class="navigation-header">
+                NAVIGATION
+            </div>
+
+            <!-- Tab List -->
+            <ul class="tab-list" id="tab-list">
+                <li class="tab-item active" data-tab="apps">
+                    <i class="fas fa-th-large"></i>
+                    <span>Apps</span>
+                </li>
+            </ul>
+
+
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <!-- Apps Tab Content -->
+            <div id="tab-apps" class="tab-content active">
+                <div class="tab-header">
+                    <div>
+                        <h1><i class="fas fa-th-large"></i> Applications</h1>
+                        <p>Click any app to launch it</p>
+                    </div>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="browse-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="app-search" placeholder="Search applications..." oninput="filterApps()">
+                    </div>
+                    <select id="category-filter" class="category-dropdown" onchange="filterApps()">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+
+                <!-- Apps Grid -->
+                <div id="apps-grid" class="apps-grid">
+                    <!-- App cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Buttons -->
+        <div class="floating-buttons">
+            <button class="floating-btn" id="refresh-btn" title="Refresh Apps" onclick="loadApps()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="floating-btn" id="settings-btn" title="Settings" onclick="openSettingsModal()">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay" style="display: none;">
+        <div class="modal settings-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="modal-close-btn" onclick="closeSettingsModal()" title="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body settings-modal-body">
+                <div class="settings-sidebar">
+                    <div class="settings-navigation-header">
+                        SETTINGS
+                    </div>
+                    <div class="settings-nav">
+                        <div class="settings-nav-item active" data-settings-tab="appearance">
+                            <i class="fas fa-palette"></i>
+                            <span>Appearance</span>
+                        </div>
+                        <div class="settings-nav-item" data-settings-tab="behavior">
+                            <i class="fas fa-cogs"></i>
+                            <span>Behavior</span>
+                        </div>
+                        <div class="settings-nav-item" data-settings-tab="about">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-content">
+                    <!-- Appearance Settings -->
+                    <div id="settings-appearance" class="settings-panel active">
+                        <h4><i class="fas fa-palette"></i> Appearance Settings</h4>
+                        
+                        <div class="settings-group">
+                            <label class="settings-label">Theme Presets</label>
+                            <div id="theme-presets-grid" class="theme-presets-grid">
+                                <!-- Theme preset cards will be generated by JavaScript -->
+                            </div>
+                            <p class="settings-description">Click on a theme preset to apply it instantly</p>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">Theme Selector</label>
+                            <select id="theme-select" class="settings-select">
+                                <option value="classic-dark">Classic Dark</option>
+                                <option value="modern-gray">Modern Gray</option>
+                                <option value="ocean-blue">Ocean Blue</option>
+                                <option value="forest-green">Forest Green</option>
+                                <option value="royal-purple">Royal Purple</option>
+                                <option value="crimson-red">Crimson Red</option>
+                                <option value="teal-mint">Teal Mint</option>
+                                <option value="sunset-orange">Sunset Orange</option>
+                                <option value="midnight-blue">Midnight Blue</option>
+                                <option value="custom">Custom Theme</option>
+                            </select>
+                            <p class="settings-description">Choose the application's color scheme</p>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">
+                                <input type="checkbox" id="rainbow-mode-checkbox" class="settings-checkbox">
+                                Rainbow Mode
+                            </label>
+                            <p class="settings-description">Enable dynamic rainbow color cycling</p>
+                            
+                            <div id="rainbow-speed-container" style="display: none; margin-top: 1rem;">
+                                <label class="settings-label">Rainbow Speed: <span id="rainbow-speed-value">5s</span></label>
+                                <input type="range" id="rainbow-speed-slider" min="1" max="10" value="5" class="settings-slider">
+                                <p class="settings-description">Adjust how fast the rainbow colors cycle</p>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">Primary Color</label>
+                            <div class="color-picker-group">
+                                <input type="color" id="primary-color-picker" class="color-picker" value="#ff6b35">
+                                <span class="color-preview" id="primary-color-preview">#ff6b35</span>
+                            </div>
+                            <p class="settings-description">Choose the primary accent color (disabled when rainbow mode is active)</p>
+                        </div>
+                    </div>
+
+                    <!-- Behavior Settings -->
+                    <div id="settings-behavior" class="settings-panel">
+                        <h4><i class="fas fa-cogs"></i> Behavior Settings</h4>
+
+                        <div class="settings-group">
+                            <label class="settings-label">Auto Update</label>
+                            <div class="setting-item">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="auto-update-checkbox">
+                                    <span class="checkmark"></span>
+                                    Enable automatic app updates
+                                </label>
+                            </div>
+                            <p class="settings-description">Automatically check for and install app updates when available</p>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">Update Check Interval</label>
+                            <div class="setting-item">
+                                <select id="update-interval-select" class="form-select">
+                                    <option value="3600000">Every hour</option>
+                                    <option value="21600000">Every 6 hours</option>
+                                    <option value="43200000">Every 12 hours</option>
+                                    <option value="86400000">Every day</option>
+                                    <option value="604800000">Every week</option>
+                                </select>
+                            </div>
+                            <p class="settings-description">How often to check for app updates</p>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">App Management</label>
+                            <div class="management-buttons">
+                                <button class="btn btn-primary" onclick="loadApps()">
+                                    <i class="fas fa-sync-alt"></i> Reload Apps
+                                </button>
+                                <button class="btn btn-secondary" onclick="checkForUpdatesNow()">
+                                    <i class="fas fa-download"></i> Check for Updates Now
+                                </button>
+                            </div>
+                            <p class="settings-description">Refresh the application list and check for updates</p>
+                        </div>
+
+
+                    </div>
+
+                    <!-- About Settings -->
+                    <div id="settings-about" class="settings-panel">
+                        <h4><i class="fas fa-info-circle"></i> About</h4>
+                        
+                        <div class="about-section">
+                            <div class="about-logo">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="about-info">
+                                <h3>MTechware's App Launcher</h3>
+                                <p class="version">Version 0.0.1</p>
+                                <p class="description">A modern application launcher for managing and installing your favorite apps.</p>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">Settings File</label>
+                            <div class="settings-file-info">
+                                <p class="settings-description">Settings are saved to:</p>
+                                <code id="settings-file-path">Loading...</code>
+                                <button class="btn btn-secondary" onclick="openSettingsFolder()" style="margin-top: 0.5rem;">
+                                    <i class="fas fa-folder-open"></i> Open Settings Folder
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <label class="settings-label">Links</label>
+                            <div class="link-buttons">
+                                <button class="btn btn-secondary" onclick="openExternal('https://github.com/mtechware')">
+                                    <i class="fab fa-github"></i> GitHub
+                                </button>
+                                <button class="btn btn-secondary" onclick="openExternal('https://discord.gg/GSTEfkxhmD')">
+                                    <i class="fab fa-discord"></i> Discord
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSettingsModal()">Close</button>
+                <button class="btn btn-primary" onclick="saveSettingsModal()">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>
