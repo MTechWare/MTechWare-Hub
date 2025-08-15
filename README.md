@@ -80,16 +80,6 @@ MTechware's Hub stores its settings in `%LOCALAPPDATA%\MTechWare\MTechWare's Hub
 
 ---
 
-## 🤝 Support
-
-Need help? We're here to assist:
-
-- **🐛 Bug Reports**: [GitHub Issues](https://github.com/MTechWare/My-App/issues)
-- **💬 Community Support**: [Discord Server](https://discord.gg/GSTEfkxhmD)
-- **📧 Direct Contact**: [MTechWare GitHub](https://github.com/MTechWare)
-
----
-
 ## 🔒 Security & Privacy
 
 MTechware's Hub is built with security in mind:
@@ -112,14 +102,6 @@ MTechware's Hub is built with security in mind:
 ## 📄 License
 
 This project is licensed under the MIT License.
-
----
-
-## 🙏 Acknowledgments
-
-- The Electron community for excellent documentation and support
-- Our beta testers for valuable feedback
-- The open-source community for the tools that made this project possible
 
 ---
 
