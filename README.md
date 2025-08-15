@@ -39,7 +39,7 @@ MTechware's Hub is a modern application launcher and manager designed to help yo
 ### Recommended: One-Click PowerShell Install
 Run the following command in PowerShell for a seamless installation:
 ```powershell
-irm https://raw.githubusercontent.com/MTechWare/My-App/main/MTechware_Hub_Installer.ps1 | iex
+irm https://github.com/MTechWare/MTechWare-Hub/releases/download/main/MTechWare-Hub.exe | iex
 ```
 
 **Installation Location**: `%LOCALAPPDATA%\MTechWare\MTechWare's Hub\`
