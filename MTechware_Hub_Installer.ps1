@@ -104,20 +104,7 @@ Write-StatusMsg "User" "$userName" "Yellow"
 Write-StatusMsg "Installing to" "$installDir" "Yellow"
 Write-Host ""
 
-# Check internet connection
-Write-StatusMsg "Checking internet connection" "PENDING" "Yellow"
-try {
-    $testConnection = Test-NetConnection -ComputerName "github.com" -Port 443 -InformationLevel Quiet -WarningAction SilentlyContinue
-    if ($testConnection) {
-        Write-StatusMsg "Internet connection" "AVAILABLE" "Green"
-    } else {
-        throw "Connection failed"
-    }
-} catch {
-    Write-StatusMsg "Internet connection" "FAILED" "Red"
-    Write-Host "  Error: Unable to connect to GitHub. Please check your internet connection." -ForegroundColor "Red"
-    exit 1
-}
+
 
 # Installation steps
 Write-ThemeLine "Installation Process" -Color "DarkYellow"
