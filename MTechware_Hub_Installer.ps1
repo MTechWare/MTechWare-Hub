@@ -60,12 +60,12 @@ function Write-StatusMsg {
 # Configuration
 $appName = "MTechware's Hub"
 $companyName = "MTechWare"
-$version = "0.0.1"
+$version = "0.0.2"
 $installDir = "$env:LOCALAPPDATA\MTechWare\MTechWare's Hub"
 $exeUrl = "https://github.com/MTechWare/MTechWare-Hub/releases/download/main/Hub.exe"
 $desktop = [Environment]::GetFolderPath("Desktop")
 $shortcutPath = Join-Path $desktop "$appName.lnk"
-$exeName = "MTechware-Hub.exe"
+$exeName = "Hub.exe"
 $targetExePath = Join-Path $installDir $exeName
 
 # System information
