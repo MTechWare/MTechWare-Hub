@@ -231,6 +231,32 @@
                         </div>
 
                         <div class="settings-group">
+                            <label class="settings-label">System Tray</label>
+                            <div class="setting-item">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="minimize-to-tray-checkbox">
+                                    <span class="checkmark"></span>
+                                    Minimize to system tray
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="close-to-tray-checkbox">
+                                    <span class="checkmark"></span>
+                                    Close to system tray
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="start-minimized-checkbox">
+                                    <span class="checkmark"></span>
+                                    Start minimized to tray
+                                </label>
+                            </div>
+                            <p class="settings-description">Control how the application behaves with the system tray. When enabled, the app will continue running in the background.</p>
+                        </div>
+
+                        <div class="settings-group">
                             <label class="settings-label">App Management</label>
                             <div class="management-buttons">
                                 <button class="btn btn-primary" onclick="loadApps()">

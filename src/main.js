@@ -1,10 +1,11 @@
-const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, Tray, Menu, Notification } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { spawn, exec } = require('child_process');
 const os = require('os');
 
 let mainWindow;
+let tray = null;
 
 // Settings management
 const SETTINGS_DIR = path.join(os.homedir(), 'AppData', 'Local', 'MTechWare', "MTechWare's Hub");
@@ -18,7 +19,11 @@ const DEFAULT_SETTINGS = {
     rainbowSpeed: 5,
     customTheme: {},
     autoUpdate: false,
-    updateInterval: 86400000 // 24 hours in milliseconds
+    updateInterval: 86400000, // 24 hours in milliseconds
+    minimizeToTray: true,
+    closeToTray: true,
+    startMinimized: false,
+    trayNotificationShown: false
 };
 
 // Ensure settings directory exists
@@ -334,6 +339,125 @@ async function uninstallApp(appId) {
     }
 }
 
+// Create system tray
+function createTray() {
+    try {
+        const iconPath = path.join(__dirname, 'assets', 'images', 'icon.ico');
+        console.log('Creating tray with icon path:', iconPath);
+
+        // Check if icon file exists
+        if (!fs.existsSync(iconPath)) {
+            console.error('Tray icon file not found:', iconPath);
+            return;
+        }
+
+        tray = new Tray(iconPath);
+        console.log('Tray created successfully');
+
+        const contextMenu = Menu.buildFromTemplate([
+            {
+                label: 'Open MTechWare Hub',
+                click: () => {
+                    showWindow();
+                }
+            },
+            {
+                label: 'Hide Window',
+                click: () => {
+                    if (mainWindow) {
+                        mainWindow.hide();
+                    }
+                }
+            },
+            { type: 'separator' },
+            {
+                label: 'Settings',
+                click: () => {
+                    showWindow();
+                    // Send message to renderer to open settings tab
+                    if (mainWindow) {
+                        mainWindow.webContents.send('open-settings-tab');
+                    }
+                }
+            },
+            { type: 'separator' },
+            {
+                label: 'Exit',
+                click: () => {
+                    app.isQuiting = true;
+                    app.quit();
+                }
+            }
+        ]);
+
+        tray.setContextMenu(contextMenu);
+        tray.setToolTip('MTechWare Hub');
+
+        // Handle tray click events
+        tray.on('click', () => {
+            if (mainWindow) {
+                if (mainWindow.isVisible()) {
+                    mainWindow.hide();
+                } else {
+                    showWindow();
+                }
+            }
+        });
+
+        tray.on('double-click', () => {
+            showWindow();
+        });
+    } catch (error) {
+        console.error('Error creating tray:', error);
+    }
+}
+
+// Show and focus the main window
+function showWindow() {
+    if (mainWindow) {
+        if (mainWindow.isMinimized()) {
+            mainWindow.restore();
+        }
+        mainWindow.show();
+        mainWindow.focus();
+    }
+}
+
+// Show tray notification (only once)
+async function showTrayNotification() {
+    try {
+        const settings = loadSettingsFromFile();
+
+        // Only show if not shown before
+        if (settings.trayNotificationShown) {
+            return;
+        }
+
+        // Check if notifications are supported
+        if (!Notification.isSupported()) {
+            console.log('Notifications not supported on this system');
+            return;
+        }
+
+        const notification = new Notification({
+            title: 'MTechWare Hub',
+            body: 'App is now running in the system tray. Click the tray icon to open or right-click for options.',
+            icon: path.join(__dirname, 'assets', 'images', 'icon.ico'),
+            silent: false
+        });
+
+        notification.show();
+
+        // Mark notification as shown
+        settings.trayNotificationShown = true;
+        await saveSettingsToFile(settings);
+
+        console.log('Tray notification shown');
+    } catch (error) {
+        console.error('Error showing tray notification:', error);
+    }
+}
+
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -353,12 +477,46 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
     mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
+        const settings = loadSettingsFromFile();
+        if (!settings.startMinimized) {
+            mainWindow.show();
+        } else {
+            // App started minimized to tray
+            showTrayNotification();
+        }
+    });
+
+    // Handle window close event
+    mainWindow.on('close', (event) => {
+        const settings = loadSettingsFromFile();
+        if (!app.isQuiting && settings.closeToTray) {
+            event.preventDefault();
+            mainWindow.hide();
+            showTrayNotification(); // Show notification when closed to tray
+            return false;
+        }
+    });
+
+    // Handle window minimize event
+    mainWindow.on('minimize', (event) => {
+        const settings = loadSettingsFromFile();
+        if (settings.minimizeToTray) {
+            event.preventDefault();
+            mainWindow.hide();
+            showTrayNotification(); // Show notification when minimized to tray
+            return false;
+        }
     });
 
     // Handle window controls
     ipcMain.on('window-minimize', () => {
-        mainWindow.minimize();
+        const settings = loadSettingsFromFile();
+        if (settings.minimizeToTray) {
+            mainWindow.hide();
+            showTrayNotification(); // Show notification when minimized to tray via button
+        } else {
+            mainWindow.minimize();
+        }
     });
 
     ipcMain.on('window-maximize', () => {
@@ -370,7 +528,14 @@ function createWindow() {
     });
 
     ipcMain.on('window-close', () => {
-        mainWindow.close();
+        const settings = loadSettingsFromFile();
+        if (settings.closeToTray) {
+            mainWindow.hide();
+            showTrayNotification(); // Show notification when closed to tray via button
+        } else {
+            app.isQuiting = true;
+            mainWindow.close();
+        }
     });
 
     // Handle app launching
@@ -478,12 +643,38 @@ function createWindow() {
     ipcMain.handle('open-settings-folder', () => {
         shell.openPath(SETTINGS_DIR);
     });
+
+    // Handle tray-related actions
+    ipcMain.on('show-window', () => {
+        showWindow();
+    });
+
+    ipcMain.on('hide-window', () => {
+        if (mainWindow) {
+            mainWindow.hide();
+        }
+    });
+
+    ipcMain.on('toggle-window', () => {
+        if (mainWindow) {
+            if (mainWindow.isVisible()) {
+                mainWindow.hide();
+            } else {
+                showWindow();
+            }
+        }
+    });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    createTray();
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
+    // Don't quit the app when all windows are closed if tray is enabled
+    const settings = loadSettingsFromFile();
+    if (process.platform !== 'darwin' && !settings.closeToTray) {
         app.quit();
     }
 });
@@ -492,4 +683,8 @@ app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
+});
+
+app.on('before-quit', () => {
+    app.isQuiting = true;
 });

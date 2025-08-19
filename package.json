@@ -1,6 +1,6 @@
 {
   "name": "mtechware-hub",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "src/main.js",
   "description": "MTechware's Hub - A modern application for managing and installing your favorite apps",
   "author": "MTechware",
@@ -15,7 +15,7 @@
   "build": {
     "appId": "https://mtechware.github.io/",
     "productName": "MTechware's Hub",
-    "icon": "src/assets/images/icon.ico",
+    "icon": "../src/assets/images/icon.ico",
     "copyright": "Copyright © 2025 MTechware",
     "win": {
       "target": [

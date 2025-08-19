@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![MTechware's Hub Version](https://img.shields.io/badge/MTechware's_Hub-v0.0.1-orange?style=for-the-badge&logo=windows&logoColor=white)
+![MTechware's Hub Version](https://img.shields.io/badge/MTechware's_Hub-v0.0.2-orange?style=for-the-badge&logo=windows&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows_11-blue?style=for-the-badge&logo=windows)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 [![Discord Community](https://img.shields.io/badge/💬_Join-Discord-7289DA?style=for-the-badge&logo=discord)](https://discord.gg/GSTEfkxhmD)
@@ -25,6 +25,7 @@ MTechware's Hub is a modern application launcher and manager designed to help yo
 - **🗂️ App Management**: Easily uninstall or update installed applications
 - **🎨 Modern Interface**: Clean, intuitive design with customizable themes
 - **⚙️ Settings & Preferences**: Customize the app to your liking
+- **🔔 System Tray**: Run the app in the system tray for easy access
 
 ### 🎯 What Makes It Special
 
@@ -39,7 +40,7 @@ MTechware's Hub is a modern application launcher and manager designed to help yo
 ### Recommended: One-Click PowerShell Install
 Run the following command in PowerShell for a seamless installation:
 ```powershell
-irm https://raw.githubusercontent.com/MTechWare/MTechWare-Hub/refs/heads/main/MTechware_Hub_Installer.ps1 | iex
+irm https://raw.githubusercontent.com/MTechWare/My-App/main/MTechware_Hub_Installer.ps1 | iex
 ```
 
 **Installation Location**: `%LOCALAPPDATA%\MTechWare\MTechWare's Hub\`
@@ -80,6 +81,16 @@ MTechware's Hub stores its settings in `%LOCALAPPDATA%\MTechWare\MTechWare's Hub
 
 ---
 
+## 🤝 Support
+
+Need help? We're here to assist:
+
+- **🐛 Bug Reports**: [GitHub Issues](https://github.com/MTechWare/My-App/issues)
+- **💬 Community Support**: [Discord Server](https://discord.gg/GSTEfkxhmD)
+- **📧 Direct Contact**: [MTechWare GitHub](https://github.com/MTechWare)
+
+---
+
 ## 🔒 Security & Privacy
 
 MTechware's Hub is built with security in mind:
@@ -102,6 +113,14 @@ MTechware's Hub is built with security in mind:
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+---
+
+## 🙏 Acknowledgments
+
+- The Electron community for excellent documentation and support
+- Our beta testers for valuable feedback
+- The open-source community for the tools that made this project possible
 
 ---
 
