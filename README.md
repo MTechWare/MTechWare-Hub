@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![MTechware's Hub Version](https://img.shields.io/badge/MTechware's_Hub-v0.0.2-orange?style=for-the-badge&logo=windows&logoColor=white)
+![MTechware's Hub Version](https://img.shields.io/badge/MTechware's_Hub-v0.0.3-orange?style=for-the-badge&logo=windows&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows_11-blue?style=for-the-badge&logo=windows)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 [![Discord Community](https://img.shields.io/badge/💬_Join-Discord-7289DA?style=for-the-badge&logo=discord)](https://discord.gg/GSTEfkxhmD)
