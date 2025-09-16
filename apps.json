@@ -9,7 +9,7 @@
       "icon": "fas fa-tools",
       "path": "WinTool.exe",
       "category": "System Tools",
-      "version": "0.3.8wb",
+      "version": "0.3.9wb",
       "managed": true,
       "installScript": "irm https://raw.githubusercontent.com/MTechWare/wintool/refs/heads/main/WinTool_Installer.ps1 | iex",
       "updateScript": "New-Item -ItemType Directory -Path \"$env:LOCALAPPDATA\\MTechWare\\WinTool\" -Force | Out-Null; $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri \"https://github.com/MTechWare/wintool/releases/download/release/WinTool.exe\" -OutFile \"$env:LOCALAPPDATA\\MTechWare\\WinTool\\WinTool.exe\" -UseBasicParsing",
